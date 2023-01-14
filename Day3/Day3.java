@@ -4,27 +4,38 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Day3{
-    static ArrayList Sum = new ArrayList<>();
+    static ArrayList<ArrayList<Integer>> Sum = new ArrayList<>();
     static HashMap <String,Integer> BigValues = new HashMap<>();
     static HashMap <String,Integer> SmallValues = new HashMap<>();
     
-    static void Analyse(String line){
+    private static void Analyse(String line, HashMap<String,Integer> Big, HashMap<String,Integer> Small){
         String[] arrayn = line.split("");
         int arrayl = arrayn.length / 2;
         String[] left = new String[arrayl];
         String[] right = new String[arrayl];
+        ArrayList<Integer> common1 = new ArrayList<>();
         for (int i=0; i < arrayl; i++){
             left[i] = arrayn[i];
         }
 
-        for (int i = arrayl+1; i < arrayl; i++){
-            right[i] = arrayn[i];
+        for (int j=0, i = arrayl; i < arrayl*2; i++, j++){
+            right[j] = arrayn[i];
         }
 
+       for (int i=0; i < arrayl; i++){
+            for (int j=0; j < arrayl; j++){
+                if (left[i].equals(right[j])){
+                    if (Big.containsKey(right[j]) && !common1.contains(Big.get(right[j]))){
+                        common1.add(Big.get(right[j]));
+                    }
+                    else if (Small.containsKey(right[j]) && !common1.contains(Small.get(right[j]))){
+                        common1.add(Small.get(right[j]));
+                    }
+                }
+            }
+        } 
 
-        for (String i : left){
-            System.out.println(i);
-        }
+        Sum.add(common1);
 
     }
     public static void main (String args[]){
@@ -40,12 +51,19 @@ public class Day3{
         try{
             File input = new File("Day3/input.txt");
             Scanner reader = new Scanner(input);
-            String sample = "vJrwpWtwJgWrhcsFMMfFFhFp";
-            /*while (reader.hasNextLine()){
+            String sample = "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL";
+            while (reader.hasNextLine()){
                 String line = reader.nextLine();
-                System.out.println(line);
-            }*/
-            Analyse(sample);
+                Analyse(line,BigValues,SmallValues);
+            }
+            int max = 0;
+            for (int i = 0; i < Sum.size(); i++){
+            for (int j = 0; j < Sum.get(i).size(); j++){
+                max += Sum.get(i).get(j);
+            }
+        }
+
+        System.out.println(max);
         }
 
         catch(FileNotFoundException error){
