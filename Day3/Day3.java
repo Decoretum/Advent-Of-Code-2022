@@ -5,6 +5,7 @@ import java.util.*;
 
 public class Day3{
     static ArrayList<ArrayList<Integer>> Sum = new ArrayList<>();
+    static ArrayList<ArrayList<String>> GroupSum = new ArrayList<>(); //1 big arraylist
     static HashMap <String,Integer> BigValues = new HashMap<>();
     static HashMap <String,Integer> SmallValues = new HashMap<>();
     
@@ -38,6 +39,13 @@ public class Day3{
         Sum.add(common1);
 
     }
+
+    static void Group(String line, HashMap<String,Integer> Big, HashMap<String,Integer> Small){
+        String[] arrayn = line.split("");
+        ArrayList<Integer> common1 = new ArrayList<>();
+
+
+    }
     public static void main (String args[]){
         String Big = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String Small = "abcdefghijklmnopqrstuvwxyz";
@@ -52,15 +60,33 @@ public class Day3{
             File input = new File("Day3/input.txt");
             Scanner reader = new Scanner(input);
             String sample = "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL";
+            int count = 1;
             while (reader.hasNextLine()){
+                ArrayList<String> minigroup = new ArrayList<>(); 
                 String line = reader.nextLine();
                 Analyse(line,BigValues,SmallValues);
+                if (count > 3){
+                    count = 1;
+                    if (count == 1){
+                        GroupSum.add(line);
+                        count++;
+                    }
+                }
+                else if (count <= 3){
+                    minigroup.add(line);
+                    count++;
+                }
+
             }
+
+
             int max = 0;
             for (int i = 0; i < Sum.size(); i++){
             for (int j = 0; j < Sum.get(i).size(); j++){
                 max += Sum.get(i).get(j);
             }
+
+            System.out.println(GroupSum);
         }
 
         System.out.println(max);
