@@ -7,7 +7,7 @@ import packages.FSystem;
 //File Directory
 //
 
-public class Day7{
+public class Day7b {
     public static void main (String args[]){
         try {
             FileInputStream file = new FileInputStream("Day7/input.txt");
@@ -15,6 +15,9 @@ public class Day7{
 
             //counter
             int total = 0;
+
+            //unused space
+            int unused = 21618835;
 
             //hashmap for every directory
             HashMap<FSystem,Integer> Dirs = new HashMap<>();
@@ -28,7 +31,6 @@ public class Day7{
 
             while (reader.hasNextLine()){                
                 String line = reader.nextLine();
-                System.out.println(line);
 
                 //Beggining edge case
                 if (line.equals("$ cd /")){
@@ -37,14 +39,12 @@ public class Day7{
                 
                 //Normal Cases
                 else if (line.equals("$ ls")){
-                    System.out.println("Will start adding files/directory");
                     mode = true;
                     continue;
                 }
 
                 //Mode is in appending mode but shifted to cd
                 else if (mode == true && line.contains("$")) {
-                    System.out.println("Stopped appending!");
                     mode = false;
                 }
                 
@@ -57,7 +57,6 @@ public class Day7{
                     } else if (!line.contains("$") && !line.contains("dir")){ //File scenario
                         String converted = line.replaceAll("[^\\d]","");
                         int num = Integer.parseInt(converted);
-                        System.out.println(num);
                         FSystem Copy = Head;
                         while (Copy != null){             
                             int old = Dirs.get(Copy);
@@ -82,18 +81,26 @@ public class Day7{
             }
             reader.close();
             
-
+            int lowest = 7052440;
+            int start = 0;
+            ArrayList<Integer> Choices = new ArrayList<>();
             for (FSystem i: Dirs.keySet()){
-                System.out.println("Name " + ": " + i.name + " with children");
-                for (FSystem j: i.ListAll()){
-                    System.out.println(j.name);
-                }
+                Choices.add(Dirs.get(i));
                 if (Dirs.get(i) <= 100000){
                     total += Dirs.get(i);
                 }
             }
 
-            System.out.println(total);
+            Collections.sort(Choices);
+            for (int i : Choices){
+                if (i < lowest){
+                    System.out.println(false);
+                } else {
+                    System.out.println(i);
+                }
+            }
+
+            Head = Head.moveOut();
             
 
 
